@@ -2,15 +2,15 @@ import java.util.Random;
 
 public class Calculate {
     
-    public static Double[] calculateAlpha(Double[] estimate, Double beta) {
+    public static double[] calculateAlpha(double[] estimate, double beta) {
 	
 	// summation of i = 1 to n 1 - (q_i hat at time t)
-        Double sum = 0.0;
+        double sum = 0.0;
         for (int i = 0; i < estimate.length; i++) {
             sum += (1 - estimate[i]);
         }
 
-        Double[] alphas = new Double[estimate.length];
+        double[] alphas = new double[estimate.length];
         for (int i = 0; i < alphas.length; i++) {
 	    // alpha = (1 - (q_i hat at time t)) / summation * beta * n
             alphas[i] =  (1 - estimate[i]) / sum * beta * (estimate.length);
@@ -18,7 +18,7 @@ public class Calculate {
         return alphas;
     }
 
-    private static Double calculateScore(Double trueQuality, Double alpha) {
+    private static double calculateScore(double trueQuality, double alpha) {
         Random r = new Random();
         
         // generate scores with N(mean = trueQuality, var = 1/alpha)
@@ -26,8 +26,8 @@ public class Calculate {
         return score;
     }
 
-    public static Double[] calculateEstimate(Double[] trueQuality, Double[] estimate, Double[] alphas, Double score) {
-        Double[] updates = new Double[estimate.length];
+    public static double[] calculateEstimate(double[] trueQuality, double[] estimate, double[] alphas) {
+        double[] updates = new double[estimate.length];
         for (int i = 0; i < updates.length; i++) {
 	    // new estimate = old estimate + (score - old estimate) * alpha_i
             updates[i] = estimate[i] + (calculateScore(trueQuality[i], alphas[i]) - estimate[i]) * alphas[i];
